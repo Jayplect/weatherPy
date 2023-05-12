@@ -9,7 +9,7 @@ Data's true power is its ability to definitively answer questions. In this proje
 <img width="120" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/5462064f-17bc-4b63-97f0-034eb771cc00>
 
 ## Summary of Dataset
-I created a set of latitudes and longitudes using the random function from numpy (Example 1) and the used these cordinates combinations to identify the nearest cities. Citipy was used to access the nearest cities based on the coordinates (Example 2). Note that the city data generated is based on random coordinates and would thus differ for each query.
+I created a set of latitudes and longitudes using the random function from numpy (Example 1) and the used these cordinates combinations to identify the nearest cities. <a href = https://pypi.org/project/citipy/> <strong> Citipy </strong> </a>  library  was used to access the nearest cities based on the coordinates (Example 2). Note that the city data generated is based on random coordinates and would thus differ for each query.
 
   #Example 1: create a set of random lat and lng combinations
       
@@ -64,11 +64,11 @@ The first step was to make a call, using the OpenWeatherMap API (Example 3), for
             pass
 
 ### Step 2: Visualizations
-After using the OpenWeatherMap API to retrieve weather data from the cities list generated in step above,I created a series of scatter plots to showcase the following relationships: Latitude vs. Temperature (Plot 1), Latitude vs. Humidity, Latitude vs. Cloudiness, Latitude vs. Wind Speed. 
+After using the OpenWeatherMap API to retrieve weather data from the cities list generated in step above, I created a series of scatter plots to showcase the following relationships: Latitude vs. Temperature (Plot 1), Latitude vs. Humidity, Latitude vs. Cloudiness, Latitude vs. Wind Speed. 
 
 Plot 1: Chart showing  relationship between Latitude and Temperature
 
-<img width="700" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/64ee1cd3-7666-44ff-9cde-74db44f9f27b>
+<img width="500" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/64ee1cd3-7666-44ff-9cde-74db44f9f27b>
 
 ### Step 3: Staistics
 In this step, I computed the linear regression for each relationship created above by separating the plots into Northern Hemisphere (greater than or equal to 0 degrees latitude) and Southern Hemisphere (less than 0 degrees latitude). To save time, I defined a function (Example 5) in order to create the linear regression plots.
@@ -106,11 +106,11 @@ In this step, I computed the linear regression for each relationship created abo
             
 Plot 2: An example of Scatter Plot showing linear regression between Max Temperature and Latitude in the Northern Hemisphere (i.e., latitude >= 0)
 
-<img width="1000" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/f270d29a-7492-431f-8a53-1bc79731556a>
+<img width="500" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/f270d29a-7492-431f-8a53-1bc79731556a>
 
 Plot 3: Scatter Plot showing linear regression between Max Temperature and Latitude in the Southern Hemisphere (i.e., latitude < 0)
 
-<img width="1000" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/4f4f24e2-0bc9-4412-ba21-e5b97ffd9ef4>
+<img width="500" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/4f4f24e2-0bc9-4412-ba21-e5b97ffd9ef4>
 
 ### Step 4: Querying and Mapping
 Lastly, I filtered for my ideal city using some specific criteria (Example 6), queried the first hotel located wihtin 10km of coordinates (Example 7) and rendered their locations on a map plot (Plot 4). The criteria used for selecting my ideal city included cities with max temperatures lower than 27 degrees but higher than 21, cites with wind speed less than 4.5 m/s and cities with clear skies (i.e., zero cloudiness). In order to ensure that no key or value error arise due to unavailable data, I used the try/except method to by pass missing data (Example 8).
@@ -149,9 +149,9 @@ Plot 4: Map showing all Cities generated using CityPy
 
 <img width="1000" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/14b461d6-caf2-444f-b1ba-9d0e7e108c06>
  
- Plot 5: My Ideal Cities based on the criteria for cities (> 21 ${^oC}$ max_temperatures < 27 ${^oC}$, wind_speed < 4.5 m/s, cloudiness = zero 
+Plot 5: My Ideal Cities  (based on these criteria: > 21 ${^oC}$ max_temperatures < 27 ${^oC}$, wind_speed < 4.5 m/s, cloudiness = zero) 
  
-<img width="1000" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/e8a9d71d-9427-42b8-99ac-96d19e088a19>
+<img width="900" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/e8a9d71d-9427-42b8-99ac-96d19e088a19>
 
 ## Summary of Results
 - From Plot 1, temperature becomes less warmer as we approach higher latitudes in the Northern hemisphere (latitudes >= 0) and vice-versa. On the other hand, temperatures feels warmer as we near the equator and vice-versa in the southern hemisphere (latitudes < 0).
