@@ -33,8 +33,10 @@ The first step was to make a call, using the OpenWeatherMap API (Example 3), for
     # Save config information.
         url = "http://api.openweathermap.org/data/2.5/weather?"
         units = "metric"
+        
     # Build partial query URL
         query_url= f"{url}appid={weather_api_key}&units={units}&q=
+        
     # Loop through all the cities in our list to fetch weather data
         for i, city in enumerate(cities):
             # Create endpoint URL with each city
@@ -46,6 +48,7 @@ The first step was to make a call, using the OpenWeatherMap API (Example 3), for
           try:
             # Parse the JSON and retrieve data
             city_weather = requests.get(city_url).json()
+            
             # Parse out latitude, longitude, max temp, humidity, cloudiness, wind speed, country, and date
             city_lat = city_weather["coord"]["lat"]
             city_lng = city_weather["coord"]["lon"]
@@ -55,6 +58,7 @@ The first step was to make a call, using the OpenWeatherMap API (Example 3), for
             city_wind = city_weather["wind"]["speed"]
             city_country = city_weather["sys"]["country"]
             city_date = city_weather["dt"]
+            
       # If an error is experienced, skip the city
           except:
             pass
@@ -64,7 +68,7 @@ After using the OpenWeatherMap API to retrieve weather data from the cities list
 
 Plot 1: Chart showing  relationship between Latitude and Temperature
 
-<img width="1000" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/64ee1cd3-7666-44ff-9cde-74db44f9f27b>
+<img width="700" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/64ee1cd3-7666-44ff-9cde-74db44f9f27b>
 
 ### Step 3: Staistics
 In this step, I computed the linear regression for each relationship created above by separating the plots into Northern Hemisphere (greater than or equal to 0 degrees latitude) and Southern Hemisphere (less than 0 degrees latitude). To save time, I defined a function (Example 5) in order to create the linear regression plots.
@@ -76,19 +80,23 @@ In this step, I computed the linear regression for each relationship created abo
             (slope, intercept, rvalue, pvalue, stderr) = linregress(x_values, y_values)
             y_regress = slope * x_values + intercept
             line_eqn = f"y={round(slope,2)}x+{round(intercept,2)}"
+            
             #plot
             plt.figure(figsize = (9,7))
             plt.scatter(x_values, y_values, s = 60)
             plt.plot(x_values, y_regress, "r-")
+            
             #text coordinates
             text_y_coord = max(y_values)/10
             if min(x_values) < 0:
                 text_x_coord = min(x_values)
             elif max(x_values) > 0:
                 text_x_coord = max(x_values)/10
+                
             #line equation
             plt.annotate(line_eqn,(text_x_coord,text_y_coord), fontsize=12,color="red", size= 16)
             print(f"The r-squared value is {rvalue**2}")
+            
             #label and graph properties
             plt.ylabel(title.split("vs")[0], size = 14 )
             plt.xlabel(title.split("vs")[1], size = 14)
@@ -110,6 +118,7 @@ Lastly, I filtered for my ideal city using some specific criteria (Example 6), q
   #Example 6: Narrow down cities that fit criteria and drop any results with null values 
 
         df = df.loc[(df["Max Temp"] < 27) & (df["Max Temp"] > 21) & (df["Wind Speed"] < 4.5) & (df["Cloudiness"] == 0)]
+        
         #Drop any rows with null values using the dropna() function
         df = df.dropna()
 
@@ -117,10 +126,13 @@ Lastly, I filtered for my ideal city using some specific criteria (Example 6), q
         
         radius =10000
         params = {"categories": "accommodation.hotel", "apiKey": geoapify_key}
+        
         # Set base URL
         base_url = "https://api.geoapify.com/v2/places"
+        
         # Make and API request using the params dictionary
         response = requests.get(base_url, params)
+        
         # Convert the API response to JSON format
         data = response.json()
 
@@ -129,6 +141,7 @@ Lastly, I filtered for my ideal city using some specific criteria (Example 6), q
       try:
           df.loc[index, "col"] = name_address["features"][0]["properties"]["name"]
       except (KeyError, IndexError):
+      
           # If no hotel is found, set the hotel name as "No hotel found".
           df.loc[index, "col"] = "No hotel found"
 
