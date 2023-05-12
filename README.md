@@ -11,7 +11,7 @@ Data's true power is its ability to definitively answer questions. In this proje
 
 
 ## Summary of Dataset
-I created a set of latitudes and longitudes using the random function from numpy (Example 1) and the used these cordinates combinations to identify the nearest cities. Citipy was used to access the cities based on the coordinates (Example 2). Note that the city data generated is based on random coordinates and would thus differ for each query.
+I created a set of latitudes and longitudes using the random function from numpy (Example 1) and the used these cordinates combinations to identify the nearest cities. Citipy was used to access the nearest cities based on the coordinates (Example 2). Note that the city data generated is based on random coordinates and would thus differ for each query.
 
   #Example 1: create a set of random lat and lng combinations
       
@@ -28,6 +28,73 @@ I created a set of latitudes and longitudes using the random function from numpy
           
 ## Project Steps
 ### Step 1: Making API calls for Weather Data 
+The first step was to make a call for weather information (e.g., 
+# Set the API base URL
+    # Save config information.
+url = "http://api.openweathermap.org/data/2.5/weather?"
+units = "metric"
+
+    # Build partial query URL
+query_url= f"{url}appid={weather_api_key}&units={units}&q="
+
+# Define an empty list to fetch the weather data for each city
+city_data = []
+
+# Print to logger
+print("Beginning Data Retrieval     ")
+print("-----------------------------")
+
+# Create counters
+record_count = 1
+set_count = 1
+
+# Loop through all the cities in our list to fetch weather data
+for i, city in enumerate(cities):
+        
+    # Group cities in sets of 50 for logging purposes
+    if (i % 50 == 0 and i >= 50):
+        set_count += 1
+        record_count = 0
+
+    # Create endpoint URL with each city
+    city_url = query_url + city
+    
+    # Log the url, record, and set numbers
+    print("Processing Record %s of Set %s | %s" % (record_count, set_count, city))
+
+    # Add 1 to the record count
+    record_count += 1
+
+    # Run an API request for each of the cities
+    try:
+        # Parse the JSON and retrieve data
+        city_weather = requests.get(city_url).json()
+
+        # Parse out latitude, longitude, max temp, humidity, cloudiness, wind speed, country, and date
+        city_lat = city_weather["coord"]["lat"]
+        city_lng = city_weather["coord"]["lon"]
+        city_max_temp = city_weather["main"]["temp_max"]
+        city_humidity = city_weather["main"]["humidity"]
+        city_clouds = city_weather["clouds"]["all"]
+        city_wind = city_weather["wind"]["speed"]
+        city_country = city_weather["sys"]["country"]
+        city_date = city_weather["dt"]
+
+        # Append the City information into city_data list
+        city_data.append({"City": city, 
+                          "Lat": city_lat, 
+                          "Lng": city_lng, 
+                          "Max Temp": city_max_temp,
+                          "Humidity": city_humidity,
+                          "Cloudiness": city_clouds,
+                          "Wind Speed": city_wind,
+                          "Country": city_country,
+                          "Date": city_date})
+
+    # If an error is experienced, skip the city
+    except:
+        print(f"Record for {city} not found. Skipping...")
+        pass
 
 ### Step 2: Visualizations
 
@@ -38,12 +105,9 @@ Lastly, I filtered for my ideal city using some specific criteria (Example xx), 
   
   #Example xx: Narrow down cities that fit criteria and drop any results with null values 
 
-        df = df.loc[(df["Max Temp"] < 27) &  \
-                                    (df["Max Temp"] > 21) & \
-                                    (df["Wind Speed"] < 4.5) & \
-                                    (df["Cloudiness"] == 0)]
-         #Drop any rows with null values using the dropna() function
-         df = df.dropna()
+        df = df.loc[(df["Max Temp"] < 27) & (df["Max Temp"] > 21) & (df["Wind Speed"] < 4.5) & (df["Cloudiness"] == 0)]
+        #Drop any rows with null values using the dropna() function
+        df = df.dropna()
 
   #Example xx: Set parameters to query hotel nearest to the city
         
