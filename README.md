@@ -60,13 +60,16 @@ The first step was to make a call, using the OpenWeatherMap API (Example 3), for
             pass
 
 ### Step 2: Visualizations
-After using the OpenWeatherMap API to retrieve weather data from the cities list generated in step above,I created a series of scatter plots to showcase the following relationships: Latitude vs. Temperature, Latitude vs. Humidity, Latitude vs. Cloudiness
+After using the OpenWeatherMap API to retrieve weather data from the cities list generated in step above,I created a series of scatter plots to showcase the following relationships: Latitude vs. Temperature (Plot 1), Latitude vs. Humidity, Latitude vs. Cloudiness, Latitude vs. Wind Speed. 
 
-Latitude vs. Wind Speed
+Plot 1: Chart showing  relationship between Latitude and Temperature
+
+<img width="1000" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/64ee1cd3-7666-44ff-9cde-74db44f9f27b>
+
 ### Step 3: Staistics
-In this step, I computed the linear regression for each relationship created above by separating the plots into Northern Hemisphere (greater than or equal to 0 degrees latitude) and Southern Hemisphere (less than 0 degrees latitude). To save time, I defined a function (Example xx) in order to create the linear regression plots.
+In this step, I computed the linear regression for each relationship created above by separating the plots into Northern Hemisphere (greater than or equal to 0 degrees latitude) and Southern Hemisphere (less than 0 degrees latitude). To save time, I defined a function (Example 5) in order to create the linear regression plots.
 
-#Example xx: Function to create Linear Regression plots
+#Example 5: Function to create Linear Regression plots
 
         def plot_linear_regresssion (x_values, y_values, title):
             #regression line
@@ -101,17 +104,16 @@ Plot 3: Scatter Plot showing linear regression between Max Temperature and Latit
 
 <img width="1000" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/4f4f24e2-0bc9-4412-ba21-e5b97ffd9ef4>
 
-
 ### Step 4: Querying and Mapping
-Lastly, I filtered for my ideal city using some specific criteria (Example xx), queried the first hotel located wihtin 10km of coordinates (Example xx) and rendered their locations on a map plot (Plot 4). The criteria used for selecting my ideal city included cities with max temperatures lower than 27 degrees but higher than 21, cites with wind speed less than 4.5 m/s and cities with clear skies (i.e., zero cloudiness). In order to ensure that no key or value error arise due to unavailable data, I used the try/except method to by pass missing data (Example xx).
+Lastly, I filtered for my ideal city using some specific criteria (Example 6), queried the first hotel located wihtin 10km of coordinates (Example 7) and rendered their locations on a map plot (Plot 4). The criteria used for selecting my ideal city included cities with max temperatures lower than 27 degrees but higher than 21, cites with wind speed less than 4.5 m/s and cities with clear skies (i.e., zero cloudiness). In order to ensure that no key or value error arise due to unavailable data, I used the try/except method to by pass missing data (Example 8).
   
-  #Example xx: Narrow down cities that fit criteria and drop any results with null values 
+  #Example 6: Narrow down cities that fit criteria and drop any results with null values 
 
         df = df.loc[(df["Max Temp"] < 27) & (df["Max Temp"] > 21) & (df["Wind Speed"] < 4.5) & (df["Cloudiness"] == 0)]
         #Drop any rows with null values using the dropna() function
         df = df.dropna()
 
-  #Example xx: Set parameters to query hotel nearest to the city
+  #Example 7: Set parameters to query hotel nearest to the city
         
         radius =10000
         params = {"categories": "accommodation.hotel", "apiKey": geoapify_key}
@@ -122,7 +124,7 @@ Lastly, I filtered for my ideal city using some specific criteria (Example xx), 
         # Convert the API response to JSON format
         data = response.json()
 
-   #Example xx: Try/Except method to by pass missing data- Grab the first hotel from the results and store the name in the hotel_df DataFrame
+   #Example 8: Try/Except method to by pass missing data- Grab the first hotel from the results and store the name in the hotel_df DataFrame
       
       try:
           df.loc[index, "col"] = name_address["features"][0]["properties"]["name"]
@@ -130,18 +132,17 @@ Lastly, I filtered for my ideal city using some specific criteria (Example xx), 
           # If no hotel is found, set the hotel name as "No hotel found".
           df.loc[index, "col"] = "No hotel found"
 
-Plot 4: All Cities used in visualizations:
+Plot 4: Map showing all Cities generated using CityPy
 
 <img width="1000" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/14b461d6-caf2-444f-b1ba-9d0e7e108c06>
  
- Plot 4: My Ideal Cities based on the criteria for cities (> 21 ${^oC}$ max_temperatures < 27 ${^oC}$, wind_speed < 4.5 m/s, cloudiness = zero 
+ Plot 5: My Ideal Cities based on the criteria for cities (> 21 ${^oC}$ max_temperatures < 27 ${^oC}$, wind_speed < 4.5 m/s, cloudiness = zero 
  
 <img width="1000" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/e8a9d71d-9427-42b8-99ac-96d19e088a19>
 
-
 ## Summary of Results
-- From plot 2, temperature becomes less warmer as we approach higher latitudes in the Northern hemisphere and vice-versa. Aprroximately 70% of the variance in the response varaible- Max temperature can be explained by ndependent variable- Latitude. 
-- Conversely from plot 3, temperature feels warmer as we near the equator and vice-versa in the southern hemisphere . Only about 60% of the variability in the outcome data can be explained by the model.
+- From Plot 1, temperature becomes less warmer as we approach higher latitudes in the Northern hemisphere (latitudes >= 0) and vice-versa. On the other hand, temperatures feels warmer as we near the equator and vice-versa in the southern hemisphere (latitudes < 0).
+- As observed in Plot 2, aprroximately 70% of the variance in the response varaible- Max temperature, can be explained by the independent variable- Latitude.  Whereas, in plot 3, only about 60% of the variability in the outcome data can be explained by the model.
 
 ## References
 Data for this dataset was generated by edX Boot Camps LLC, and is intended for educational purposes only.
