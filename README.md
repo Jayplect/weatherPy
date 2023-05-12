@@ -26,80 +26,84 @@ I created a set of latitudes and longitudes using the random function from numpy
           
 ## Project Steps
 ### Step 1: Making API calls for Weather Data 
-The first step was to make a call for weather information (e.g., 
-# Set the API base URL
+The first step was to make a call, using the OpenWeatherMap API (Example 3), for latitude and longitude coordinates as well as weather information (e.g., max temp, humidity, cloudiness, wind speed, country, and date for each of the cities generated above. The try/except method was used to by-pass missing data (Example 4).
+
+#Example 3: Set the API base URL
+
     # Save config information.
-url = "http://api.openweathermap.org/data/2.5/weather?"
-units = "metric"
-
+        url = "http://api.openweathermap.org/data/2.5/weather?"
+        units = "metric"
     # Build partial query URL
-query_url= f"{url}appid={weather_api_key}&units={units}&q="
-
-# Define an empty list to fetch the weather data for each city
-city_data = []
-
-# Print to logger
-print("Beginning Data Retrieval     ")
-print("-----------------------------")
-
-# Create counters
-record_count = 1
-set_count = 1
-
-# Loop through all the cities in our list to fetch weather data
-for i, city in enumerate(cities):
-        
-    # Group cities in sets of 50 for logging purposes
-    if (i % 50 == 0 and i >= 50):
-        set_count += 1
-        record_count = 0
-
-    # Create endpoint URL with each city
-    city_url = query_url + city
-    
-    # Log the url, record, and set numbers
-    print("Processing Record %s of Set %s | %s" % (record_count, set_count, city))
-
-    # Add 1 to the record count
-    record_count += 1
-
-    # Run an API request for each of the cities
-    try:
-        # Parse the JSON and retrieve data
-        city_weather = requests.get(city_url).json()
-
-        # Parse out latitude, longitude, max temp, humidity, cloudiness, wind speed, country, and date
-        city_lat = city_weather["coord"]["lat"]
-        city_lng = city_weather["coord"]["lon"]
-        city_max_temp = city_weather["main"]["temp_max"]
-        city_humidity = city_weather["main"]["humidity"]
-        city_clouds = city_weather["clouds"]["all"]
-        city_wind = city_weather["wind"]["speed"]
-        city_country = city_weather["sys"]["country"]
-        city_date = city_weather["dt"]
-
-        # Append the City information into city_data list
-        city_data.append({"City": city, 
-                          "Lat": city_lat, 
-                          "Lng": city_lng, 
-                          "Max Temp": city_max_temp,
-                          "Humidity": city_humidity,
-                          "Cloudiness": city_clouds,
-                          "Wind Speed": city_wind,
-                          "Country": city_country,
-                          "Date": city_date})
-
-    # If an error is experienced, skip the city
-    except:
-        print(f"Record for {city} not found. Skipping...")
-        pass
+        query_url= f"{url}appid={weather_api_key}&units={units}&q=
+    # Loop through all the cities in our list to fetch weather data
+        for i, city in enumerate(cities):
+            # Create endpoint URL with each city
+            city_url = query_url + city
+            
+  #Example 4: Try/except method was used to by-pass missing data for the coordinates and weather informations
+   
+      # Run an API request for each of the cities
+          try:
+            # Parse the JSON and retrieve data
+            city_weather = requests.get(city_url).json()
+            # Parse out latitude, longitude, max temp, humidity, cloudiness, wind speed, country, and date
+            city_lat = city_weather["coord"]["lat"]
+            city_lng = city_weather["coord"]["lon"]
+            city_max_temp = city_weather["main"]["temp_max"]
+            city_humidity = city_weather["main"]["humidity"]
+            city_clouds = city_weather["clouds"]["all"]
+            city_wind = city_weather["wind"]["speed"]
+            city_country = city_weather["sys"]["country"]
+            city_date = city_weather["dt"]
+      # If an error is experienced, skip the city
+          except:
+            pass
 
 ### Step 2: Visualizations
+After using the OpenWeatherMap API to retrieve weather data from the cities list generated in step above,I created a series of scatter plots to showcase the following relationships: Latitude vs. Temperature, Latitude vs. Humidity, Latitude vs. Cloudiness
 
+Latitude vs. Wind Speed
 ### Step 3: Staistics
+In this step, I computed the linear regression for each relationship created above by separating the plots into Northern Hemisphere (greater than or equal to 0 degrees latitude) and Southern Hemisphere (less than 0 degrees latitude). To save time, I defined a function (Example xx) in order to create the linear regression plots.
+
+#Example xx: Function to create Linear Regression plots
+
+        def plot_linear_regresssion (x_values, y_values, title):
+            #regression line
+            (slope, intercept, rvalue, pvalue, stderr) = linregress(x_values, y_values)
+            y_regress = slope * x_values + intercept
+            line_eqn = f"y={round(slope,2)}x+{round(intercept,2)}"
+            #plot
+            plt.figure(figsize = (9,7))
+            plt.scatter(x_values, y_values, s = 60)
+            plt.plot(x_values, y_regress, "r-")
+            #text coordinates
+            text_y_coord = max(y_values)/10
+            if min(x_values) < 0:
+                text_x_coord = min(x_values)
+            elif max(x_values) > 0:
+                text_x_coord = max(x_values)/10
+            #line equation
+            plt.annotate(line_eqn,(text_x_coord,text_y_coord), fontsize=12,color="red", size= 16)
+            print(f"The r-squared value is {rvalue**2}")
+            #label and graph properties
+            plt.ylabel(title.split("vs")[0], size = 14 )
+            plt.xlabel(title.split("vs")[1], size = 14)
+            plt.yticks(size = 14)
+            plt.xticks(size = 14)
+            plt.show()
+            
+Plot 2: An example of Scatter Plot showing linear regression between Max Temperature and Latitude in the Northern Hemisphere (i.e., latitude >= 0)
+
+<img width="1000" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/f270d29a-7492-431f-8a53-1bc79731556a>
+
+Plot 3: Scatter Plot showing linear regression between Max Temperature and Latitude in the Southern Hemisphere (i.e., latitude < 0)
+
+<img width="1000" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/4f4f24e2-0bc9-4412-ba21-e5b97ffd9ef4>
+
 
 ### Step 4: Querying and Mapping
-Lastly, I filtered for my ideal city using some specific criteria (Example xx), queried the first hotel located wihtin 10km of coordinates (Example xx) and rendered their locations on a map plot (Example xx). The criteria used for selecting my ideal city included cities with max temperatures lower than 27 degrees but higher than 21, cites with wind speed less than 4.5 m/s and cities with clear skies (i.e., zero cloudiness). In order to ensure that no key or value error arise due to unavailable data, I used the try/except method to by pass missing data (Example xx).
+Lastly, I filtered for my ideal city using some specific criteria (Example xx), queried the first hotel located wihtin 10km of coordinates (Example xx) and rendered their locations on a map plot (Plot 4). The criteria used for selecting my ideal city included cities with max temperatures lower than 27 degrees but higher than 21, cites with wind speed less than 4.5 m/s and cities with clear skies (i.e., zero cloudiness). In order to ensure that no key or value error arise due to unavailable data, I used the try/except method to by pass missing data (Example xx).
   
   #Example xx: Narrow down cities that fit criteria and drop any results with null values 
 
@@ -126,16 +130,18 @@ Lastly, I filtered for my ideal city using some specific criteria (Example xx), 
           # If no hotel is found, set the hotel name as "No hotel found".
           df.loc[index, "col"] = "No hotel found"
 
-All Cities used in visualizations:
+Plot 4: All Cities used in visualizations:
 
 <img width="1000" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/14b461d6-caf2-444f-b1ba-9d0e7e108c06>
  
- Example xx: My Ideal Cities
+ Plot 4: My Ideal Cities based on the criteria for cities (> 21 ${^oC}$ max_temperatures < 27 ${^oC}$, wind_speed < 4.5 m/s, cloudiness = zero 
  
 <img width="1000" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/e8a9d71d-9427-42b8-99ac-96d19e088a19>
 
 
-## Summary of Results 
+## Summary of Results
+- From plot 2, Temperature decreases as we approach higher latitudes in the Northern hemisphere. Aprroximately 70% of the variance in the response varaible- Max temperature can be explained by ndependent variable- Latitude. 
+- Conversely from plot 3, temperature increases across latitudes in the southern hemisphere . Only about 60% of the variability in the outcome data can be explained by the model.
 
 ## References
 Data for this dataset was generated by edX Boot Camps LLC, and is intended for educational purposes only.
