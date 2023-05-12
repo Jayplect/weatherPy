@@ -8,8 +8,6 @@ Data's true power is its ability to definitively answer questions. In this proje
 <img width="120" src =https://user-images.githubusercontent.com/107348074/236379730-0286f397-c9e0-4e0c-a91c-e07d64f6ceec.png>
 <img width="120" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/5462064f-17bc-4b63-97f0-034eb771cc00>
 
-
-
 ## Summary of Dataset
 I created a set of latitudes and longitudes using the random function from numpy (Example 1) and the used these cordinates combinations to identify the nearest cities. Citipy was used to access the nearest cities based on the coordinates (Example 2). Note that the city data generated is based on random coordinates and would thus differ for each query.
 
