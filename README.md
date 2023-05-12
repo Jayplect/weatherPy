@@ -13,26 +13,66 @@ Data's true power is its ability to definitively answer questions. In this proje
 ## Summary of Dataset
 I created a set of latitudes and longitudes using the random function from numpy (Example 1) and the used these cordinates combinations to identify the nearest cities. Citipy was used to access the cities based on the coordinates (Example 2). Note that the city data generated is based on random coordinates and would thus differ for each query.
 
-  Example 1: create a set of random lat and lng combinations
-
+  #Example 1: create a set of random lat and lng combinations
+      
       lats = np.random.uniform(lat_range[0], lat_range[1], size=1500)
       lngs = np.random.uniform(lng_range[0], lng_range[1], size=1500)
       lat_lngs = zip(lats, lngs)
       
-  Example 2: Identify nearest city for each lat, lng combination
-  
+  #Example 2: Identify nearest city for each lat, lng combination
+      
       for lat_lng in lat_lngs:
           city = citipy.nearest_city(lat_lng[0], lat_lng[1]).city_name
           if city not in cities:
             cities.append(city)
           
 ## Project Steps
-### Step 1: Merging both data sets 
-
-### Step 2: Summary Statistics 
+### Step 1: Making API calls for Weather Data 
 
 ### Step 2: Visualizations
--
+
+### Step 3: Staistics
+
+### Step 4: Querying and Mapping
+Lastly, I filtered for my ideal city using some specific criteria (Example xx), queried the first hotel located wihtin 10km of coordinates (Example xx) and rendered their locations on a map plot (Example xx). The criteria used for selecting my ideal city included cities with max temperatures lower than 27 degrees but higher than 21, cites with wind speed less than 4.5 m/s and cities with clear skies (i.e., zero cloudiness). In order to ensure that no key or value error arise due to unavailable data, I used the try/except method to by pass missing data (Example xx).
+  
+  #Example xx: Narrow down cities that fit criteria and drop any results with null values 
+
+        df = df.loc[(df["Max Temp"] < 27) &  \
+                                    (df["Max Temp"] > 21) & \
+                                    (df["Wind Speed"] < 4.5) & \
+                                    (df["Cloudiness"] == 0)]
+         #Drop any rows with null values using the dropna() function
+         df = df.dropna()
+
+  #Example xx: Set parameters to query hotel nearest to the city
+        
+        radius =10000
+        params = {"categories": "accommodation.hotel", "apiKey": geoapify_key}
+        # Set base URL
+        base_url = "https://api.geoapify.com/v2/places"
+        # Make and API request using the params dictionary
+        response = requests.get(base_url, params)
+        # Convert the API response to JSON format
+        data = response.json()
+
+   #Example xx: Try/Except method to by pass missing data- Grab the first hotel from the results and store the name in the hotel_df DataFrame
+      
+      try:
+          df.loc[index, "col"] = name_address["features"][0]["properties"]["name"]
+      except (KeyError, IndexError):
+          # If no hotel is found, set the hotel name as "No hotel found".
+          df.loc[index, "col"] = "No hotel found"
+
+All Cities used in visualizations:
+
+<img width="1000" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/14b461d6-caf2-444f-b1ba-9d0e7e108c06>
+ 
+ Example xx: My Ideal Cities
+ 
+<img width="1000" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/e8a9d71d-9427-42b8-99ac-96d19e088a19>
+
+
 ## Summary of Results 
 
 ## References
