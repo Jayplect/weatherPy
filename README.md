@@ -6,6 +6,8 @@ Data's true power is its ability to definitively answer questions. In this proje
 <img width="120" src = https://user-images.githubusercontent.com/107348074/236379877-e0e3b90e-217f-4700-ade2-df8b5ef8f23b.png>
 <img width="120" src = https://user-images.githubusercontent.com/107348074/236379504-0f0e8534-6435-4924-b72d-283946e03c4b.png>
 <img width="120" src =https://user-images.githubusercontent.com/107348074/236379730-0286f397-c9e0-4e0c-a91c-e07d64f6ceec.png>
+<img width="120" src =https://github.com/Jayplect/python-api-challenge/assets/107348074/5462064f-17bc-4b63-97f0-034eb771cc00>
+
 
 
 ## Summary of Dataset
